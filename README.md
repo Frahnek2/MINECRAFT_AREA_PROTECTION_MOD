@@ -1,5 +1,6 @@
 # Minecraft Area Protection Mod
 
+## This is an experimental project, and it may be unstable; use at your own risk!
 This mod allows players to restrict building and breaking of blocks in their own areas using a simple "Claim Wand".
 We provide two ways to run this mod on your server: **Skript** and a standard **Java (Spigot/Paper) Plugin**, so there is a version compatible with any setup!
 
