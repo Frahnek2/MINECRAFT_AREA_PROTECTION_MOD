@@ -1,0 +1,22 @@
+name: AreaProtection
+version: 1.0
+main: com.areaprotection.AreaProtectionPlugin
+api-version: 1.20
+description: "A plugin allowing users to claim land using a wand."
+
+commands:
+  claimwand:
+    description: "Get the claim wand."
+    usage: "/claimwand"
+  claim:
+    description: "Claim the selected area."
+    usage: "/claim <name>"
+  adminclaim:
+    description: "Admin override controls for claims."
+    usage: "/adminclaim <list|remove> [name]"
+    permission: protection.admin
+
+permissions:
+  protection.admin:
+    description: "Allows overriding any claim defenses and deleting claims."
+    default: op
