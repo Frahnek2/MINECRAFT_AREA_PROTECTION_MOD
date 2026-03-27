@@ -1,0 +1,17 @@
+﻿Proprietary License
+
+Copyright (c) 2026 Franciszek Skalski
+
+1. PERMITTED USE
+You are permitted to download and install this application solely for personal or internal use.
+2. RESTRICTIONS
+You are strictly prohibited from:
+Modifying: You may not alter, edit, merge, or create derivative works of the source code or the application.
+Redistributing: You may not share, sell, rent, lease, or distribute the source code or the application to any third party.
+Reverse Engineering: You may not attempt to decompile or extract the source code from the application.
+3. OWNERSHIP
+The author retains all intellectual property rights, including copyrights and patents, related to this software. No ownership rights are transferred by downloading or using this application.
+4. TERMINATION
+This license is effective until terminated. Your rights under this license will terminate automatically without notice if you fail to comply with any of its terms.
+5. DISCLAIMER OF WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
