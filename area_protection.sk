@@ -1,0 +1,107 @@
+# Area Protection Script
+# Allows players to claim areas to prevent others from building/destroying
+# Admin bypass requires permission "protection.admin"
+
+command /claimwand:
+    description: Get the wand to select your claim area
+    trigger:
+        give player a golden shovel named "&e&lClaim Wand"
+        send "&aYou have received the Claim Wand! Left-click a block for Position 1, Right-click for Position 2." to player
+
+on left click:
+    if player is holding a golden shovel named "&e&lClaim Wand":
+        cancel event
+        if event-block is set:
+            set {pos1::%player's uuid%} to location of event-block
+            send "&aPosition 1 set to %x-coordinate of event-block%, %y-coordinate of event-block%, %z-coordinate of event-block%." to player
+
+on right click:
+    if player is holding a golden shovel named "&e&lClaim Wand":
+        cancel event
+        if event-block is set:
+            set {pos2::%player's uuid%} to location of event-block
+            send "&aPosition 2 set to %x-coordinate of event-block%, %y-coordinate of event-block%, %z-coordinate of event-block%." to player
+
+command /claim <text>:
+    description: Claim the area between pos1 and pos2
+    usage: /claim <name>
+    trigger:
+        if arg-1 is not set:
+            send "&cUsage: /claim <name>" to player
+            stop
+        if {claims::*} contains arg-1:
+            send "&cA claim with that name already exists!" to player
+            stop
+        if {pos1::%player's uuid%} is not set:
+            send "&cYou must set pos1 first using the left-click of the Claim Wand!" to player
+            stop
+        if {pos2::%player's uuid%} is not set:
+            send "&cYou must set pos2 first using the right-click of the Claim Wand!" to player
+            stop
+        if {pos1::%player's uuid%}'s world is not {pos2::%player's uuid%}'s world:
+            send "&cBoth positions must be in the same world!" to player
+            stop
+        
+        # Save claim
+        add arg-1 to {claims::*}
+        set {claim::%arg-1%::owner} to player's uuid
+        set {claim::%arg-1%::pos1} to {pos1::%player's uuid%}
+        set {claim::%arg-1%::pos2} to {pos2::%player's uuid%}
+        
+        send "&aClaim &e%arg-1% &ahas been successfully created!" to player
+        
+        # Cleanup temp vars
+        delete {pos1::%player's uuid%}
+        delete {pos2::%player's uuid%}
+
+command /adminclaim <text> [<text>]:
+    description: Manage claims as an admin
+    permission: protection.admin
+    permission message: "&cYou do not have permission to use this command."
+    usage: /adminclaim <remove|list> [name]
+    trigger:
+        if arg-1 is "remove":
+            if arg-2 is not set:
+                send "&cUsage: /adminclaim remove <name>" to player
+                stop
+            if {claims::*} does not contain arg-2:
+                send "&cThat claim does not exist." to player
+                stop
+            remove arg-2 from {claims::*}
+            delete {claim::%arg-2%::owner}
+            delete {claim::%arg-2%::pos1}
+            delete {claim::%arg-2%::pos2}
+            send "&aClaim &e%arg-2% &ahas been completely deleted." to player
+        else if arg-1 is "list":
+            if size of {claims::*} is 0:
+                send "&eThere are no claims currently." to player
+                stop
+            send "&eList of all claims:" to player
+            loop {claims::*}:
+                send "&f- &a%loop-value%" to player
+        else:
+            send "&cUsage: /adminclaim remove <name> | /adminclaim list" to player
+
+on block place:
+    if player has permission "protection.admin":
+        stop
+    loop {claims::*}:
+        set {_pos1} to {claim::%loop-value%::pos1}
+        set {_pos2} to {claim::%loop-value%::pos2}
+        if event-block is within {_pos1} and {_pos2}:
+            if {claim::%loop-value%::owner} is not player's uuid:
+                cancel event
+                send "&cThis area is protected. You cannot build here!" to player
+                stop
+
+on block break:
+    if player has permission "protection.admin":
+        stop
+    loop {claims::*}:
+        set {_pos1} to {claim::%loop-value%::pos1}
+        set {_pos2} to {claim::%loop-value%::pos2}
+        if event-block is within {_pos1} and {_pos2}:
+            if {claim::%loop-value%::owner} is not player's uuid:
+                cancel event
+                send "&cThis area is protected. You cannot break blocks here!" to player
+                stop
